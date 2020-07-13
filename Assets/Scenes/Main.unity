@@ -322,7 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e8f1e01ff06ff0478c5f967223483f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 10
+  _playerSettings: {fileID: 11400000, guid: 22592e0d69f76fe47a24203d974c666e, type: 2}
   boundary:
     xMin: -5
     xMax: 5

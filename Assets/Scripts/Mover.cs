@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Mover : MonoBehaviour
 {
+    private Rigidbody moveRigidbody;
     public float speed;
     public void Start()
     {
-        GetComponent<Rigidbody>().velocity = GetComponent<Rigidbody>().transform.forward * speed;
+       moveRigidbody = GetComponent<Rigidbody>();
+       moveRigidbody.velocity = moveRigidbody.transform.forward * speed;
     }
 }

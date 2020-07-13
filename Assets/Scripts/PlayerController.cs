@@ -10,7 +10,7 @@ public class Boundary
 
 public class PlayerController : MonoBehaviour
 {
-    public float Speed = 10;
+    [SerializeField] private PlayerSettings _playerSettings;
     public Boundary boundary;
     public float tilt;
     public GameObject shot;
@@ -19,28 +19,34 @@ public class PlayerController : MonoBehaviour
     public float nextFire = 0.0f;
     public float fireRate2 = 0.5f;
     public GameObject super_shot;
+    private Rigidbody playerRigidbody;
+    private AudioSource sound;
 
     public void Update()
     {
+        sound = GetComponent<AudioSource>();
+
         if(Input.GetButton("Fire1") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-            GetComponent<AudioSource>().Play();
+            sound.Play();
         }
         if (Input.GetButton("Fire2") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate2;
             Instantiate(super_shot, shotSpawn.position, shotSpawn.rotation);
-            GetComponent<AudioSource>().Play();
+            sound.Play();
         }
-    }
-    private void FixedUpdate()
-    {
+
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
-        GetComponent<Rigidbody>().rotation = Quaternion.Euler(0f, 0f, GetComponent<Rigidbody>().velocity.x * -tilt);
-        GetComponent<Rigidbody>().velocity = new Vector3(moveHorizontal, 0f, moveVertical) * Speed;
-        GetComponent<Rigidbody>().position = new Vector3(Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax), 0.0f, Mathf.Clamp(GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax));
+
+        playerRigidbody = GetComponent<Rigidbody>();
+
+        playerRigidbody.rotation = Quaternion.Euler(0f, 0f, playerRigidbody.velocity.x * -tilt);
+        playerRigidbody.velocity = new Vector3(moveHorizontal, 0f, moveVertical) * _playerSettings.Speed;
+        playerRigidbody.position = new Vector3(Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax), 0.0f,
+            Mathf.Clamp(playerRigidbody.position.z, boundary.zMin, boundary.zMax));
     }
 }

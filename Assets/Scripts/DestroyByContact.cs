@@ -8,11 +8,13 @@ public class DestroyByContact : MonoBehaviour
     public GameObject explosionPlayer;
     private GameObject cloneExplosion;
     public GameObject mega_exp;
+    private Rigidbody cloneRigidbody;
 
     private void OnParticleCollision()
     {
+        cloneRigidbody = GetComponent<Rigidbody>();
         // клонирование префаба взрыва
-        cloneExplosion = (GameObject)Instantiate(mega_exp, GetComponent<Rigidbody>().position, GetComponent<Rigidbody>().rotation);
+        cloneExplosion = (GameObject)Instantiate(mega_exp, cloneRigidbody.position, cloneRigidbody.rotation);
 
         // уничтожение объекта на котором висит этот скрипт
         Destroy(gameObject);
@@ -24,16 +26,18 @@ public class DestroyByContact : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        cloneRigidbody = GetComponent<Rigidbody>();
+
+        if (other.tag == "Player")
         {
-            cloneExplosion = Instantiate(explosionPlayer, GetComponent<Rigidbody>().position, GetComponent<Rigidbody>().rotation) as GameObject;
+            cloneExplosion = Instantiate(explosionPlayer, cloneRigidbody.position, cloneRigidbody.rotation) as GameObject;
             Destroy(other.gameObject);
             Destroy(gameObject);
             Destroy(cloneExplosion, 1f);
         }
         if (other.tag == "Bolt")
         {
-            cloneExplosion = Instantiate(explosion, GetComponent<Rigidbody>().position, GetComponent<Rigidbody>().rotation) as GameObject;
+            cloneExplosion = Instantiate(explosion, cloneRigidbody.position, cloneRigidbody.rotation) as GameObject;
             Destroy(other.gameObject);
             Destroy(gameObject);
             Destroy(cloneExplosion, 1f);

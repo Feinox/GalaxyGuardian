@@ -13,10 +13,13 @@ public class EnemyManeuver : MonoBehaviour
     private float currentSpeed;
     public Boundary boundary;
     public float tilt;
+    private Rigidbody enemyRigidbody;
 
     void Start()
     {
-        currentSpeed = GetComponent<Rigidbody>().velocity.z;
+        enemyRigidbody = GetComponent<Rigidbody>();
+
+        currentSpeed = enemyRigidbody.velocity.z;
         StartCoroutine(Evade());
     }
     IEnumerator Evade()
@@ -30,12 +33,12 @@ public class EnemyManeuver : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(maneuverWait.x, maneuverWait.y));
         }
     }
-    private void FixedUpdate()
+    private void Update()
     {
-        float newManeuver = Mathf.MoveTowards(GetComponent<Rigidbody>().velocity.x, targetManeuver, maneuverSpeed * Time.deltaTime);
-        GetComponent<Rigidbody>().velocity = new Vector3(newManeuver, 0.0f, currentSpeed);
-        GetComponent<Rigidbody>().position = new Vector3(Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax), 0.0f, Mathf.Clamp(GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax));
-        GetComponent<Rigidbody>().rotation = Quaternion.Euler(0f, 0f, GetComponent<Rigidbody>().velocity.x * -tilt);
+        float newManeuver = Mathf.MoveTowards(enemyRigidbody.velocity.x, targetManeuver, maneuverSpeed * Time.deltaTime);
+        enemyRigidbody.velocity = new Vector3(newManeuver, 0.0f, currentSpeed);
+        enemyRigidbody.position = new Vector3(Mathf.Clamp(enemyRigidbody.position.x, boundary.xMin, boundary.xMax), 0.0f, Mathf.Clamp(enemyRigidbody.position.z, boundary.zMin, boundary.zMax));
+        enemyRigidbody.rotation = Quaternion.Euler(0f, 0f, enemyRigidbody.velocity.x * -tilt);
     }
 }
   
